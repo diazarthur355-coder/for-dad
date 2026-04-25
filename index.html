@@ -1087,5 +1087,49 @@ function draw(){
 function loop(){update();draw();if(running)rafId=requestAnimationFrame(loop);}
 </script>
 </body>
+<style>
+  /* Agrandit les boutons pour les gros pouces */
+  .btn { 
+    width: 70px !important; 
+    height: 70px !important; 
+    opacity: 0.8 !important; 
+    background: rgba(255,255,255,0.2) !important;
+    border: 2px solid white !important;
+  }
+  #controls { bottom: 20px !important; padding: 10px !important; }
+</style>
+
+<script>
+(function() {
+    // 1. Supprime le délai de clic sur mobile
+    document.addEventListener('touchstart', function(e) {
+        if (e.target.classList.contains('btn')) {
+            e.preventDefault();
+            const action = e.target.id;
+            if(action === 'btnL') keys['ArrowLeft'] = true;
+            if(action === 'btnR') keys['ArrowRight'] = true;
+            if(action === 'btnU') keys['ArrowUp'] = true;
+        }
+    }, {passive: false});
+
+    document.addEventListener('touchend', function(e) {
+        const action = e.target.id;
+        if(action === 'btnL') keys['ArrowLeft'] = false;
+        if(action === 'btnR') keys['ArrowRight'] = false;
+        if(action === 'btnU') keys['ArrowUp'] = false;
+    });
+
+    // 2. Optimisation des performances
+    // On désactive les effets lourds si on détecte un téléphone
+    if (/Android|iPhone|iPad/i.test(navigator.userAgent)) {
+        window.isMobile = true;
+        // On simplifie les ombres du contexte pour gagner des FPS
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        console.log("🚀 Mode Mobile Fluide activé");
+    }
+})();
+</script>
 </html>
 
